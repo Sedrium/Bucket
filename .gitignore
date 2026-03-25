@@ -1,0 +1,46 @@
+# Build results
+[Bb]in/
+[Oo]bj/
+[Dd]ebug/
+[Rr]elease/
+x64/
+x86/
+artifacts/
+
+# Rider / VS / VS Code user files
+.idea/
+.vs/
+.vscode/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# .NET generated files
+*.cache
+*.pdb
+*.mdb
+*.opendb
+*.VC.db
+*.dbmdl
+*.jfm
+*.aps
+*.nupkg
+*.snupkg
+
+# NuGet
+packages/
+*.nuget.props
+*.nuget.targets
+project.lock.json
+project.fragment.lock.json
+
+# Logs
+*.log
+
+# ASP.NET / user secrets
+secrets.json
+
+# OS files
+.DS_Store
+Thumbs.db
