@@ -1,21 +1,15 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net10.0</TargetFramework>
-    <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
   </PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="MediatR" Version="12.4.1" />
-    <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="10.0.5" />
-  </ItemGroup>
-
-  <ItemGroup>
+    <ItemGroup>
     <ProjectReference Include="..\Bucket.Application\Bucket.Application.csproj" />
     <ProjectReference Include="..\Bucket.Common\Bucket.Common.csproj" />
     <ProjectReference Include="..\Bucket.Contract\Bucket.Contract.csproj" />
-    <ProjectReference Include="..\Bucket.Infrastructure\Bucket.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>
