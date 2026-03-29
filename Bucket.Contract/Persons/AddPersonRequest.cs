@@ -1,3 +1,3 @@
 namespace Bucket.Contract.Persons;
 
-public record AddPersonRequest(double Id, string Firstname, string Lastname, DateOnly DateOfBirth);
+public record AddPersonRequest(string Firstname, string Lastname, int DateOfBirth);

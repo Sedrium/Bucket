@@ -1,4 +1,3 @@
-using Bucket.Application;
 using Bucket.Application.Interfaces;
 using Bucket.Common;
 using Bucket.Contract;
@@ -21,12 +20,14 @@ public class GetPersonQueryHandler : IRequestHandler<GetPersonQuery, Result<Page
     public async Task<Result<PagedResponse<PersonResponse>>> Handle(GetPersonQuery request, CancellationToken cancellationToken)
     {
         var result = await _personQuery.GetPersonsAsync(request.Pagination, cancellationToken);
+
         if (!result.IsSuccess)
         {
             return Result<PagedResponse<PersonResponse>>.Failure(result.Error!);
         }
 
         var mapped = result.Value!.Items.Select(p => p.ToResponse()).ToList();
+        
         return Result<PagedResponse<PersonResponse>>.Success(new PagedResponse<PersonResponse>(mapped, result.Value.TotalCount));
     }
 }

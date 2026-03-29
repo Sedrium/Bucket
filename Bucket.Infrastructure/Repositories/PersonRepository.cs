@@ -1,6 +1,5 @@
 using Bucket.Application.Interfaces;
 using Bucket.Common;
-using Bucket.Contract.Persons;
 using Bucket.Domain.Persons;
 using DataModel = Bucket.Infrastructure.Data.Data;
 
@@ -15,15 +14,24 @@ public class PersonRepository : IPersonRepository
         _data = data;
     }
 
-    public Task<Result<IReadOnlyList<Person>>> AddPersonAsync(Person person, CancellationToken cancellationToken)
+    public Task<Result<long>> AddPersonAsync(Person person, CancellationToken cancellationToken)
     {
-        if (_data.Persons.Exists(p => p.Id == person.Id))
-        {
-            return Task.FromResult(Result<IReadOnlyList<Person>>.Failure(PersonErrors.DuplicateId));
-        }
+        var id = GetNextId();
+
+        person.SetId(id);
 
         _data.Persons.Add(person);
-        IReadOnlyList<Person> snapshot = _data.Persons.ToList();
-        return Task.FromResult(Result<IReadOnlyList<Person>>.Success(snapshot));
+
+        return Task.FromResult(Result<long>.Success(id));
+    }
+
+    private long GetNextId()
+    {
+        if (_data.Persons.Count == 0)
+        {
+            return 1;
+        }
+
+        return _data.Persons.Max(p => p.Id!.Value) + 1;
     }
 }

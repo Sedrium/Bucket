@@ -4,28 +4,22 @@ namespace Bucket.Domain.Persons;
 
 public class Person
 {
-    public const int MaxNameLength = 100;
+    private const int MaxNameLength = 100;
 
-    public double Id { get; }
+    public long? Id { get; private set; }
     public string FirstName { get; }
     public string LastName { get; }
-    public DateOnly DateOfBirth { get; }
+    public Year AgeYears { get; }
 
-    private Person(double id, string firstName, string lastName, DateOnly dateOfBirth)
+    private Person(string firstName, string lastName, Year yearOfBirth)
     {
-        Id = id;
         FirstName = firstName;
         LastName = lastName;
-        DateOfBirth = dateOfBirth;
+        AgeYears = yearOfBirth;
     }
 
-    public static Result<Person> Create(double id, string? firstName, string? lastName, DateOnly dateOfBirth)
+    public static Result<Person> Create(string? firstName, string? lastName, Year yearOfBirth)
     {
-        if (id < 1)
-        {
-            return Result<Person>.Failure("Id must be at least 1.");
-        }
-
         var fn = firstName?.Trim() ?? string.Empty;
         var ln = lastName?.Trim() ?? string.Empty;
 
@@ -49,22 +43,19 @@ public class Person
             return Result<Person>.Failure($"Last name cannot exceed {MaxNameLength} characters.");
         }
 
-        if (dateOfBirth == default)
+        if (yearOfBirth == default)
         {
-            return Result<Person>.Failure("Date of birth is required.");
+            return Result<Person>.Failure("Year of birth is required.");
         }
 
-        var today = DateOnly.FromDateTime(DateTime.UtcNow);
-        if (dateOfBirth > today)
-        {
-            return Result<Person>.Failure("Date of birth cannot be in the future.");
-        }
+        return Result<Person>.Success(new Person(fn, ln, yearOfBirth));
+    }
 
-        if (dateOfBirth < today.AddYears(-150))
+    public void SetId(long id)
+    {
+        if (!Id.HasValue)
         {
-            return Result<Person>.Failure("Date of birth is not valid.");
+            Id = id;
         }
-
-        return Result<Person>.Success(new Person(id, fn, ln, dateOfBirth));
     }
 }

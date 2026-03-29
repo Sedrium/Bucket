@@ -55,14 +55,11 @@ namespace Bucket.Api.Controllers
         [HttpPost]
         public async Task<ActionResult<IReadOnlyList<PersonResponse>>> AddPerson([FromBody] AddPersonRequest request)
         {
-            var result = await _sender.Send(new AddPersonCommand(request));
+            var result = await _sender.Send(new AddPersonCommand(request.Firstname, request.Lastname, request.DateOfBirth));
 
             if (!result.IsSuccess)
             {
-                var statusCode = result.Error == PersonErrors.DuplicateId
-                    ? StatusCodes.Status409Conflict
-                    : StatusCodes.Status400BadRequest;
-                return Problem(detail: result.Error, statusCode: statusCode);
+                return Problem(detail: result.Error, statusCode: StatusCodes.Status400BadRequest);
             }
 
             return Accepted(result.Value);

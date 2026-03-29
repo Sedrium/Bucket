@@ -5,5 +5,5 @@ namespace Bucket.Application.Interfaces;
 
 public interface IPersonRepository
 {
-    Task<Result<IReadOnlyList<Person>>> AddPersonAsync(Person person, CancellationToken cancellationToken);
+    Task<Result<long>> AddPersonAsync(Person person, CancellationToken cancellationToken);
 }
