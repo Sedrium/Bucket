@@ -1,6 +1,7 @@
 using Bucket.Application.Handlers.Queries;
 using Bucket.Application.Interfaces;
 using Bucket.Infrastructure.Queries;
+using Bucket.Infrastructure.Repositories;
 using DataModel = Bucket.Infrastructure.Data.Data;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -12,6 +13,7 @@ builder.Services.AddProblemDetails();
 builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblyContaining<GetPersonQuery>());
 builder.Services.AddSingleton(_ => DataModel.Instance);
 builder.Services.AddScoped<IPersonQuery, PersonQuery>();
+builder.Services.AddScoped<IPersonRepository, PersonRepository>();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
 

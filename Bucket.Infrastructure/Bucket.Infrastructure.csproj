@@ -10,6 +10,7 @@
     <ProjectReference Include="..\Bucket.Application\Bucket.Application.csproj" />
     <ProjectReference Include="..\Bucket.Common\Bucket.Common.csproj" />
     <ProjectReference Include="..\Bucket.Contract\Bucket.Contract.csproj" />
+    <ProjectReference Include="..\Bucket.Domain\Bucket.Domain.csproj" />
   </ItemGroup>
 
 </Project>

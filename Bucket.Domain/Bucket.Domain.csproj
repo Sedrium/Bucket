@@ -7,13 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="MediatR" Version="12.4.1" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\Bucket.Common\Bucket.Common.csproj" />
-    <ProjectReference Include="..\Bucket.Contract\Bucket.Contract.csproj" />
-    <ProjectReference Include="..\Bucket.Domain\Bucket.Domain.csproj" />
   </ItemGroup>
 
 </Project>
