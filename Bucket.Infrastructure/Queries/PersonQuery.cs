@@ -18,10 +18,10 @@ public class PersonQuery : IPersonQuery
 
     public Task<Result<PagedResponse<PersonDTO>>> GetPersonsAsync(Pagination pagination, CancellationToken cancellationToken)
     {
-        var totalCount = _data.Persons.Count;
+        var active = _data.Persons.Where(p => !p.IsDeleted).OrderBy(x => x.Id).ToList();
+        var totalCount = active.Count;
 
-        var items = _data.Persons
-            .OrderBy(x => x.Id)
+        var items = active
             .Skip((pagination.Page - 1) * pagination.PageSize)
             .Take(pagination.PageSize)
             .Select(MapToDto)
@@ -32,7 +32,7 @@ public class PersonQuery : IPersonQuery
 
     public Task<PersonDTO?> GetPersonByIdAsync(int id, CancellationToken cancellationToken)
     {
-        var person = _data.Persons.FirstOrDefault(p => p.Id == id);
+        var person = _data.Persons.FirstOrDefault(p => p.Id == id && !p.IsDeleted);
         return Task.FromResult(person is null ? null : MapToDto(person));
     }
 

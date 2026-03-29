@@ -16,7 +16,7 @@ public class PersonRepository : IPersonRepository
 
     public Task<Person?> GetByIdAsync(long id, CancellationToken cancellationToken)
     {
-        var person = _data.Persons.FirstOrDefault(p => p.Id == id);
+        var person = _data.Persons.FirstOrDefault(p => p.Id == id && !p.IsDeleted);
         return Task.FromResult(person);
     }
 

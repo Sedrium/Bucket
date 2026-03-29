@@ -81,5 +81,21 @@ namespace Bucket.Api.Controllers
 
             return Ok(result.Value);
         }
+
+        [HttpDelete("{id:long}")]
+        public async Task<IActionResult> DeletePerson(long id)
+        {
+            var result = await _sender.Send(new DeletePersonCommand(id));
+
+            if (!result.IsSuccess)
+            {
+                var status = result.Error == "Person not found."
+                    ? StatusCodes.Status404NotFound
+                    : StatusCodes.Status400BadRequest;
+                return Problem(detail: result.Error, statusCode: status);
+            }
+
+            return Accepted();
+        }
     }
 }
