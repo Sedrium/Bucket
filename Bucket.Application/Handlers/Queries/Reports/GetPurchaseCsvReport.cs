@@ -2,11 +2,12 @@ using Bucket.Application.Queries;
 using Bucket.Application.Reports;
 using Bucket.Application.Services;
 using Bucket.Common;
-using Bucket.Domain.Products;
 using MediatR;
 
 namespace Bucket.Application.Handlers.Queries.Reports;
-
+//TODO: To take the reposibility of generating the report out of the query handler it should be 
+//the reportId should be added to Queue on Message broker and asynchronous service
+//should generate the report
 public record GetPurchaseCsvReportQuery(long PurchaseId) : IRequest<Result<PurchaseCsvReport>>;
 
 public class GetPurchaseCsvReportQueryHandler : IRequestHandler<GetPurchaseCsvReportQuery, Result<PurchaseCsvReport>>

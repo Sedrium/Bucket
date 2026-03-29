@@ -31,19 +31,21 @@ public class AddPurchaseCommandHandler : IRequestHandler<AddPurchaseCommand, Res
             return Result<EntityId>.NotFound("Customer not found.");
         }
 
-        foreach (var productId in command.ProductIds)
-        {
-            var product = await _productRepository.GetByIdAsync(productId, cancellationToken);
-            if (product is null)
-            {
-                return Result<EntityId>.NotFound($"Product with id {productId} not found.");
-            }
-        }
+        var distinctProductIds = command.ProductIds.Distinct().ToList();
+        var products = await _productRepository.GetByIdsAsync(distinctProductIds, cancellationToken);
 
-        var purchaseResult = Purchase.Create(command.CustomerId, command.ProductIds);
+        var purchaseResult = PurchaseComposition.TryCreate(
+            customer,
+            command.ProductIds,
+            products);
+
         if (!purchaseResult.IsSuccess)
         {
-            return Result<EntityId>.Failure(purchaseResult.Error!);
+            return purchaseResult.FailureKind switch
+            {
+                ResultFailureKind.NotFound => Result<EntityId>.NotFound(purchaseResult.Error!),
+                _ => Result<EntityId>.Failure(purchaseResult.Error!),
+            };
         }
 
         var added = await _purchaseRepository.AddPurchaseAsync(purchaseResult.Value!, cancellationToken);

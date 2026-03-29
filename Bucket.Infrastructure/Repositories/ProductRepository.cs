@@ -20,6 +20,15 @@ public class ProductRepository : IProductRepository
         return Task.FromResult(product);
     }
 
+    public Task<IReadOnlyList<Product>> GetByIdsAsync(IReadOnlyCollection<long> productIds, CancellationToken cancellationToken)
+    {
+        var list = _data.Products
+            .Where(p => !p.IsDeleted && p.Id.HasValue && productIds.Contains(p.Id.Value))
+            .ToList();
+
+        return Task.FromResult<IReadOnlyList<Product>>(list);
+    }
+
     public Task<Result<long>> AddProductAsync(Product product, CancellationToken cancellationToken)
     {
         var id = GetNextId();

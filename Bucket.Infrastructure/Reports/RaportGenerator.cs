@@ -22,6 +22,7 @@ public class RaportGenerator : IRaportGenerator
         }
 
         var fileName = $"purchase-{input.PurchaseId}-report.csv";
+
         return new PurchaseCsvReport(fileName, sb.ToString());
     }
 
