@@ -65,5 +65,21 @@ namespace Bucket.Api.Controllers
 
             return Accepted(result.Value);
         }
+
+        [HttpPut("{id:long}")]
+        public async Task<ActionResult<long>> UpdatePerson(long id, [FromBody] UpdatePersonRequest request)
+        {
+            var result = await _sender.Send(new UpdatePersonCommand(id, request.Firstname, request.Lastname, request.DateOfBirth));
+
+            if (!result.IsSuccess)
+            {
+                var status = result.Error == "Person not found."
+                    ? StatusCodes.Status404NotFound
+                    : StatusCodes.Status400BadRequest;
+                return Problem(detail: result.Error, statusCode: status);
+            }
+
+            return Ok(result.Value);
+        }
     }
 }
