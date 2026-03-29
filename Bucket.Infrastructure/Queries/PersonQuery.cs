@@ -1,6 +1,7 @@
 using Bucket.Application.Interfaces;
 using Bucket.Common;
 using Bucket.Contract;
+using Bucket.Contract.Dtos.Persons;
 using Bucket.Domain.Persons;
 using DataModel = Bucket.Infrastructure.Data.Data;
 
@@ -15,7 +16,7 @@ public class PersonQuery : IPersonQuery
         _data = data;
     }
 
-    public Task<Result<PagedResponse<Person>>> GetPersonsAsync(Pagination pagination, CancellationToken cancellationToken)
+    public Task<Result<PagedResponse<PersonDTO>>> GetPersonsAsync(Pagination pagination, CancellationToken cancellationToken)
     {
         var totalCount = _data.Persons.Count;
 
@@ -23,14 +24,25 @@ public class PersonQuery : IPersonQuery
             .OrderBy(x => x.Id)
             .Skip((pagination.Page - 1) * pagination.PageSize)
             .Take(pagination.PageSize)
-            .AsEnumerable();
+            .Select(MapToDto)
+            .ToList();
 
-        return Task.FromResult(Result<PagedResponse<Person>>.Success(new PagedResponse<Person>(items, totalCount)));
+        return Task.FromResult(Result<PagedResponse<PersonDTO>>.Success(new PagedResponse<PersonDTO>(items, totalCount)));
     }
 
-    public Task<Person?> GetPersonByIdAsync(int id, CancellationToken cancellationToken)
+    public Task<PersonDTO?> GetPersonByIdAsync(int id, CancellationToken cancellationToken)
     {
         var person = _data.Persons.FirstOrDefault(p => p.Id == id);
-        return Task.FromResult(person);
+        return Task.FromResult(person is null ? null : MapToDto(person));
+    }
+
+    private static PersonDTO MapToDto(Person person)
+    {
+        if (!person.Id.HasValue)
+        {
+            throw new InvalidOperationException("Person id is required for mapping.");
+        }
+
+        return new PersonDTO(person.Id.Value, person.FirstName, person.LastName, person.AgeYears.Value.Year);
     }
 }

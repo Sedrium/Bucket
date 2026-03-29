@@ -2,7 +2,6 @@ using Bucket.Common;
 
 namespace Bucket.Contract;
 
-// Value object: invarianty w Create, równość po wartości, brak tożsamości.
 public sealed class Pagination
 {
     public const int MaxPageSize = 100;

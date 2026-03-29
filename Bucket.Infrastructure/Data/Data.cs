@@ -26,20 +26,20 @@ public sealed class Data
 
     private static Person Create(long id, string firstName, string lastName, DateOnly dateOfBirth)
     {
-        var yearResult = Year.Create(dateOfBirth.Year);
+        var yearResult = YearOfBirth.Create(dateOfBirth.Year);
         if (!yearResult.IsSuccess)
         {
             throw new InvalidOperationException($"Seed year invalid: {yearResult.Error}");
         }
 
         var result = Person.Create(firstName, lastName, yearResult.Value!);
-        
-        result.Value.SetId(id);
 
         if (!result.IsSuccess)
         {
             throw new InvalidOperationException($"Seed person invalid: {result.Error}");
         }
+
+        result.Value!.SetId(id);
 
         return result.Value!;
     }

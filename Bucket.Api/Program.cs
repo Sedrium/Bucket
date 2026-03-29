@@ -10,7 +10,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 builder.Services.AddProblemDetails();
-builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblyContaining<GetPersonQuery>());
+builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblyContaining<GetPersonsQuery>());
 builder.Services.AddSingleton(_ => DataModel.Instance);
 builder.Services.AddScoped<IPersonQuery, PersonQuery>();
 builder.Services.AddScoped<IPersonRepository, PersonRepository>();

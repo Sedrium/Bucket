@@ -1,4 +1,4 @@
-namespace Bucket.Contract.Persons;
+namespace Bucket.Contract.Persons.Persons;
 
 public record GetPersonRequest
 {

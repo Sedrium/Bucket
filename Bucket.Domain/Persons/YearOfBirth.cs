@@ -2,19 +2,19 @@ using Bucket.Common;
 
 namespace Bucket.Domain.Persons;
 
-public sealed class Year 
+public sealed class YearOfBirth 
 {
     public const int MinimumAgeExclusive = 18;
     public const int MaximumAgeExclusive = 120;
 
     public DateOnly Value { get; }
 
-    private Year(DateOnly value)
+    private YearOfBirth(DateOnly value)
     {
         Value = value;
     }
 
-    public static Result<Year> Create(int calendarYear)
+    public static Result<YearOfBirth> Create(int calendarYear)
     {
         DateOnly dateToValid;
 
@@ -24,21 +24,21 @@ public sealed class Year
         }
         catch (ArgumentOutOfRangeException)
         {
-            return Result<Year>.Failure("Invalid year.");
+            return Result<YearOfBirth>.Failure("Invalid year.");
         }
 
         var currentAge = DateOnly.FromDateTime(DateTime.UtcNow).Year - dateToValid.Year;
 
         if (currentAge <= MinimumAgeExclusive)
         {
-            return Result<Year>.Failure($"Age must be greater than {MinimumAgeExclusive} years.");
+            return Result<YearOfBirth>.Failure($"Age must be greater than {MinimumAgeExclusive} years.");
         }
 
         if (currentAge >= MaximumAgeExclusive)
         {
-            return Result<Year>.Failure($"Age must be less than {MaximumAgeExclusive} years.");
+            return Result<YearOfBirth>.Failure($"Age must be less than {MaximumAgeExclusive} years.");
         }
 
-        return Result<Year>.Success(new Year(dateToValid));
+        return Result<YearOfBirth>.Success(new YearOfBirth(dateToValid));
     }
 }

@@ -9,16 +9,16 @@ public class Person
     public long? Id { get; private set; }
     public string FirstName { get; }
     public string LastName { get; }
-    public Year AgeYears { get; }
+    public YearOfBirth AgeYears { get; }
 
-    private Person(string firstName, string lastName, Year yearOfBirth)
+    private Person(string firstName, string lastName, YearOfBirth yearOfBirth)
     {
         FirstName = firstName;
         LastName = lastName;
         AgeYears = yearOfBirth;
     }
 
-    public static Result<Person> Create(string? firstName, string? lastName, Year yearOfBirth)
+    public static Result<Person> Create(string? firstName, string? lastName, YearOfBirth yearOfBirth)
     {
         var fn = firstName?.Trim() ?? string.Empty;
         var ln = lastName?.Trim() ?? string.Empty;

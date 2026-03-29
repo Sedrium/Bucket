@@ -1,7 +1,8 @@
 using Bucket.Application.Handlers.Commands;
 using Bucket.Application.Handlers.Queries;
 using Bucket.Contract;
-using Bucket.Contract.Persons;
+using Bucket.Contract.Dtos.Persons;
+using Bucket.Contract.Persons.Persons;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -20,7 +21,7 @@ namespace Bucket.Api.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<PagedResponse<PersonResponse>>> GetPersons([FromQuery] GetPersonsRequest request)
+        public async Task<ActionResult<PagedResponse<PersonDTO>>> GetPersons([FromQuery] GetPersonsRequest request)
         {
             var paginationResult = Pagination.Create(request.Page, request.PageSize);
 
@@ -29,7 +30,7 @@ namespace Bucket.Api.Controllers
                 return Problem(detail: paginationResult.Error, statusCode: StatusCodes.Status400BadRequest);
             }
 
-            var result = await _sender.Send(new GetPersonQuery(paginationResult.Value!));
+            var result = await _sender.Send(new GetPersonsQuery(paginationResult.Value!));
 
             if (!result.IsSuccess)
             {
@@ -40,9 +41,9 @@ namespace Bucket.Api.Controllers
         }
 
         [HttpGet("{id:int}")]
-        public async Task<ActionResult<PersonResponse>> GetPerson([FromRoute] GetPersonRequest request)
+        public async Task<ActionResult<PersonDTO>> GetPerson([FromRoute] GetPersonRequest request)
         {
-            var result = await _sender.Send(new GetPersonByIdQuery(request.Id));
+            var result = await _sender.Send<Common.Result<PersonDTO>>(new GetPersonQuery(request.Id));
 
             if (!result.IsSuccess)
             {
@@ -53,7 +54,7 @@ namespace Bucket.Api.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<IReadOnlyList<PersonResponse>>> AddPerson([FromBody] AddPersonRequest request)
+        public async Task<ActionResult<long>> AddPerson([FromBody] AddPersonRequest request)
         {
             var result = await _sender.Send(new AddPersonCommand(request.Firstname, request.Lastname, request.DateOfBirth));
 

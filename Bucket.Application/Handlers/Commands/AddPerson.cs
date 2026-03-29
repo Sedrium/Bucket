@@ -1,7 +1,5 @@
-using Bucket.Application;
 using Bucket.Application.Interfaces;
 using Bucket.Common;
-using Bucket.Contract.Persons;
 using Bucket.Domain.Persons;
 using MediatR;
 
@@ -21,7 +19,7 @@ public class AddPersonCommandHandler : IRequestHandler<AddPersonCommand, Result<
 
     public async Task<Result<long>> Handle(AddPersonCommand command, CancellationToken cancellationToken)
     {
-        var yearOfBirth = Year.Create(command.YearOfBirth);
+        var yearOfBirth = YearOfBirth.Create(command.YearOfBirth);
 
         if (!yearOfBirth.IsSuccess)
         {
