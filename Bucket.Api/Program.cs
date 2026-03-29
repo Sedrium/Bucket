@@ -15,6 +15,7 @@ builder.Services.AddSingleton(_ => DataModel.Instance);
 builder.Services.AddScoped<IPersonQuery, PersonQuery>();
 builder.Services.AddScoped<IProductQuery, ProductQuery>();
 builder.Services.AddScoped<IPersonRepository, PersonRepository>();
+builder.Services.AddScoped<IProductRepository, ProductRepository>();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
 

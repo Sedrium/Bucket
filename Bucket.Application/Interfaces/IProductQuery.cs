@@ -7,4 +7,6 @@ namespace Bucket.Application.Interfaces;
 public interface IProductQuery
 {
     Task<Result<PagedResponse<ProductDTO>>> GetProductsAsync(Pagination pagination, CancellationToken cancellationToken);
+
+    Task<ProductDTO?> GetProductByIdAsync(long id, CancellationToken cancellationToken);
 }

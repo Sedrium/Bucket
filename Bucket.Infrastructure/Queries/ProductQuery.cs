@@ -18,16 +18,22 @@ public class ProductQuery : IProductQuery
 
     public Task<Result<PagedResponse<ProductDTO>>> GetProductsAsync(Pagination pagination, CancellationToken cancellationToken)
     {
-        var ordered = _data.Products.OrderBy(p => p.Id ?? long.MaxValue).ToList();
-        var totalCount = ordered.Count;
+        var active = _data.Products.Where(p => !p.IsDeleted).OrderBy(p => p.Id).ToList();
+        var totalCount = active.Count;
 
-        var items = ordered
+        var items = active
             .Skip((pagination.Page - 1) * pagination.PageSize)
             .Take(pagination.PageSize)
             .Select(MapToDto)
             .ToList();
 
         return Task.FromResult(Result<PagedResponse<ProductDTO>>.Success(new PagedResponse<ProductDTO>(items, totalCount)));
+    }
+
+    public Task<ProductDTO?> GetProductByIdAsync(long id, CancellationToken cancellationToken)
+    {
+        var product = _data.Products.FirstOrDefault(p => p.Id == id && !p.IsDeleted);
+        return Task.FromResult(product is null ? null : MapToDto(product));
     }
 
     private static ProductDTO MapToDto(Product product)

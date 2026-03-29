@@ -23,9 +23,14 @@ public sealed class Data
 
     private static Product CreateProduct(long id, string name, string type, double price)
     {
-        var product = new Product(name, type, price);
-        product.SetId(id);
-        return product;
+        var result = Product.Create(name, type, price);
+        if (!result.IsSuccess)
+        {
+            throw new InvalidOperationException($"Seed product invalid: {result.Error}");
+        }
+
+        result.Value!.SetId(id);
+        return result.Value!;
     }
 
     public List<Person> Persons { get; } =
