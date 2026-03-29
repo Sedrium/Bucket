@@ -24,13 +24,13 @@ public class DeletePurchasesByCustomerCommandHandler : IRequestHandler<DeletePur
         var customer = await _personRepository.GetByIdAsync(command.CustomerId, cancellationToken);
         if (customer is null)
         {
-            return Result<int>.Failure("Customer not found.");
+            return Result<int>.NotFound("Customer not found.");
         }
 
         var purchases = await _purchaseRepository.GetActiveByCustomerIdAsync(command.CustomerId, cancellationToken);
         if (purchases.Count == 0)
         {
-            return Result<int>.Failure("No active purchases for this customer.");
+            return Result<int>.NotFound("No active purchases for this customer.");
         }
 
         var count = 0;

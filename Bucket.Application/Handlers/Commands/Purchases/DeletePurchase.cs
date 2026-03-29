@@ -20,7 +20,7 @@ public class DeletePurchaseCommandHandler : IRequestHandler<DeletePurchaseComman
         var purchase = await _purchaseRepository.GetByIdAsync(command.Id, cancellationToken);
         if (purchase is null)
         {
-            return Result<long>.Failure("Purchase not found.");
+            return Result<long>.NotFound("Purchase not found.");
         }
 
         var deleteResult = purchase.Delete();

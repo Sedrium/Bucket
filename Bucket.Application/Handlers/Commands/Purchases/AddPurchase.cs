@@ -28,7 +28,7 @@ public class AddPurchaseCommandHandler : IRequestHandler<AddPurchaseCommand, Res
         var customer = await _personRepository.GetByIdAsync(command.CustomerId, cancellationToken);
         if (customer is null)
         {
-            return Result<long>.Failure("Customer not found.");
+            return Result<long>.NotFound("Customer not found.");
         }
 
         foreach (var productId in command.ProductIds)
@@ -36,7 +36,7 @@ public class AddPurchaseCommandHandler : IRequestHandler<AddPurchaseCommand, Res
             var product = await _productRepository.GetByIdAsync(productId, cancellationToken);
             if (product is null)
             {
-                return Result<long>.Failure($"Product with id {productId} not found.");
+                return Result<long>.NotFound($"Product with id {productId} not found.");
             }
         }
 

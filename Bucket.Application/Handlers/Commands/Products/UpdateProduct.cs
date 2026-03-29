@@ -21,7 +21,7 @@ public class UpdateProductCommandHandler : IRequestHandler<UpdateProductCommand,
         var existing = await _productRepository.GetByIdAsync(command.Id, cancellationToken);
         if (existing is null)
         {
-            return Result<long>.Failure("Product not found.");
+            return Result<long>.NotFound("Product not found.");
         }
 
         var updateResult = existing.Update(command.Name, command.Type, command.Price);

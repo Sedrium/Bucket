@@ -20,7 +20,7 @@ public class DeletePersonCommandHandler : IRequestHandler<DeletePersonCommand, R
         var person = await _personRepository.GetByIdAsync(command.Id, cancellationToken);
         if (person is null)
         {
-            return Result<long>.Failure("Person not found.");
+            return Result<long>.NotFound("Person not found.");
         }
 
         var deleteResult = person.Delete();

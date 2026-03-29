@@ -22,7 +22,7 @@ public class GetProductQueryHandler : IRequestHandler<GetProductQuery, Result<Pr
 
         if (dto is null)
         {
-            return Result<ProductDTO>.Failure("Product not found.");
+            return Result<ProductDTO>.NotFound("Product not found.");
         }
 
         return Result<ProductDTO>.Success(dto);

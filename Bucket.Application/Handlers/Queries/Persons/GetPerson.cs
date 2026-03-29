@@ -22,7 +22,7 @@ public class GetPersonQueryHandler : IRequestHandler<GetPersonQuery, Result<Pers
 
         if (dto is null)
         {
-            return Result<PersonDTO>.Failure("Person not found.");
+            return Result<PersonDTO>.NotFound("Person not found.");
         }
 
         return Result<PersonDTO>.Success(dto);

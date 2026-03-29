@@ -1,5 +1,6 @@
 using Bucket.Application.Handlers.Commands.Purchases;
 using Bucket.Application.Handlers.Queries.Purchases;
+using Bucket.Api.Http;
 using Bucket.Contract;
 using Bucket.Contract.Dtos.Purchases;
 using Bucket.Contract.Purchases;
@@ -27,14 +28,16 @@ public class PurchasesController : ControllerBase
 
         if (!paginationResult.IsSuccess)
         {
-            return Problem(detail: paginationResult.Error, statusCode: StatusCodes.Status400BadRequest);
+            return Problem(
+                detail: paginationResult.Error,
+                statusCode: paginationResult.GetStatusCode());
         }
 
         var result = await _sender.Send(new GetPurchasesQuery(paginationResult.Value!));
 
         if (!result.IsSuccess)
         {
-            return Problem(detail: result.Error, statusCode: StatusCodes.Status400BadRequest);
+            return Problem(detail: result.Error, statusCode: result.GetStatusCode());
         }
 
         return Ok(result.Value);
@@ -47,7 +50,7 @@ public class PurchasesController : ControllerBase
 
         if (!result.IsSuccess)
         {
-            return Problem(detail: result.Error, statusCode: StatusCodes.Status404NotFound);
+            return Problem(detail: result.Error, statusCode: result.GetStatusCode());
         }
 
         return Ok(result.Value);
@@ -60,11 +63,7 @@ public class PurchasesController : ControllerBase
 
         if (!result.IsSuccess)
         {
-            var notFound = result.Error == "Customer not found."
-                || (result.Error?.StartsWith("Product with id", StringComparison.Ordinal) ?? false);
-            var status = notFound ? StatusCodes.Status404NotFound : StatusCodes.Status400BadRequest;
-
-            return Problem(detail: result.Error, statusCode: status);
+            return Problem(detail: result.Error, statusCode: result.GetStatusCode());
         }
 
         return Accepted(result.Value);
@@ -77,10 +76,7 @@ public class PurchasesController : ControllerBase
 
         if (!result.IsSuccess)
         {
-            var status = result.Error is "Customer not found." or "No active purchases for this customer."
-                ? StatusCodes.Status404NotFound
-                : StatusCodes.Status400BadRequest;
-            return Problem(detail: result.Error, statusCode: status);
+            return Problem(detail: result.Error, statusCode: result.GetStatusCode());
         }
 
         return Accepted(result.Value);
@@ -93,10 +89,7 @@ public class PurchasesController : ControllerBase
 
         if (!result.IsSuccess)
         {
-            var status = result.Error == "Purchase not found."
-                ? StatusCodes.Status404NotFound
-                : StatusCodes.Status400BadRequest;
-            return Problem(detail: result.Error, statusCode: status);
+            return Problem(detail: result.Error, statusCode: result.GetStatusCode());
         }
 
         return Accepted();

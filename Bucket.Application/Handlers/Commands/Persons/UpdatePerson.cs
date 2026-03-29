@@ -22,7 +22,7 @@ public class UpdatePersonCommandHandler : IRequestHandler<UpdatePersonCommand, R
         var existing = await _personRepository.GetByIdAsync(command.Id, cancellationToken);
         if (existing is null)
         {
-            return Result<long>.Failure("Person not found.");
+            return Result<long>.NotFound("Person not found.");
         }
 
         var yearOfBirth = YearOfBirth.Create(command.YearOfBirth);

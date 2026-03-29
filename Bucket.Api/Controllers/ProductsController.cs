@@ -1,3 +1,4 @@
+using Bucket.Api.Http;
 using Bucket.Application.Handlers.Commands.Products;
 using Bucket.Application.Handlers.Queries.Products;
 using Bucket.Contract;
@@ -27,14 +28,16 @@ public class ProductsController : ControllerBase
 
         if (!paginationResult.IsSuccess)
         {
-            return Problem(detail: paginationResult.Error, statusCode: StatusCodes.Status400BadRequest);
+            return Problem(
+                detail: paginationResult.Error,
+                statusCode: paginationResult.GetStatusCode());
         }
 
         var result = await _sender.Send(new GetProductsQuery(paginationResult.Value!));
 
         if (!result.IsSuccess)
         {
-            return Problem(detail: result.Error, statusCode: StatusCodes.Status400BadRequest);
+            return Problem(detail: result.Error, statusCode: result.GetStatusCode());
         }
 
         return Ok(result.Value);
@@ -47,7 +50,7 @@ public class ProductsController : ControllerBase
 
         if (!result.IsSuccess)
         {
-            return Problem(detail: result.Error, statusCode: StatusCodes.Status404NotFound);
+            return Problem(detail: result.Error, statusCode: result.GetStatusCode());
         }
 
         return Ok(result.Value);
@@ -60,7 +63,7 @@ public class ProductsController : ControllerBase
 
         if (!result.IsSuccess)
         {
-            return Problem(detail: result.Error, statusCode: StatusCodes.Status400BadRequest);
+            return Problem(detail: result.Error, statusCode: result.GetStatusCode());
         }
 
         return Accepted(result.Value);
@@ -73,10 +76,7 @@ public class ProductsController : ControllerBase
 
         if (!result.IsSuccess)
         {
-            var status = result.Error == "Product not found."
-                ? StatusCodes.Status404NotFound
-                : StatusCodes.Status400BadRequest;
-            return Problem(detail: result.Error, statusCode: status);
+            return Problem(detail: result.Error, statusCode: result.GetStatusCode());
         }
 
         return Ok(result.Value);
@@ -89,10 +89,7 @@ public class ProductsController : ControllerBase
 
         if (!result.IsSuccess)
         {
-            var status = result.Error == "Product not found."
-                ? StatusCodes.Status404NotFound
-                : StatusCodes.Status400BadRequest;
-            return Problem(detail: result.Error, statusCode: status);
+            return Problem(detail: result.Error, statusCode: result.GetStatusCode());
         }
 
         return Accepted();

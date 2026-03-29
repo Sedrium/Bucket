@@ -22,7 +22,7 @@ public class GetPurchaseQueryHandler : IRequestHandler<GetPurchaseQuery, Result<
 
         if (dto is null)
         {
-            return Result<PurchaseDTO>.Failure("Purchase not found.");
+            return Result<PurchaseDTO>.NotFound("Purchase not found.");
         }
 
         return Result<PurchaseDTO>.Success(dto);

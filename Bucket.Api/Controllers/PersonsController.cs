@@ -1,3 +1,4 @@
+using Bucket.Api.Http;
 using Bucket.Application.Handlers.Commands.Persons;
 using Bucket.Application.Handlers.Queries.Persons;
 using Bucket.Contract;
@@ -27,14 +28,16 @@ namespace Bucket.Api.Controllers
 
             if (!paginationResult.IsSuccess)
             {
-                return Problem(detail: paginationResult.Error, statusCode: StatusCodes.Status400BadRequest);
+                return Problem(
+                    detail: paginationResult.Error,
+                    statusCode: paginationResult.GetStatusCode());
             }
 
             var result = await _sender.Send(new GetPersonsQuery(paginationResult.Value!));
 
             if (!result.IsSuccess)
             {
-                return Problem(detail: result.Error, statusCode: StatusCodes.Status400BadRequest);
+                return Problem(detail: result.Error, statusCode: result.GetStatusCode());
             }
 
             return Ok(result.Value);
@@ -43,11 +46,11 @@ namespace Bucket.Api.Controllers
         [HttpGet("{id:int}")]
         public async Task<ActionResult<PersonDTO>> GetPerson([FromRoute] GetPersonRequest request)
         {
-            var result = await _sender.Send<Common.Result<PersonDTO>>(new GetPersonQuery(request.Id));
+            var result = await _sender.Send(new GetPersonQuery(request.Id));
 
             if (!result.IsSuccess)
             {
-                return Problem(detail: result.Error, statusCode: StatusCodes.Status404NotFound);
+                return Problem(detail: result.Error, statusCode: result.GetStatusCode());
             }
 
             return Ok(result.Value);
@@ -60,7 +63,7 @@ namespace Bucket.Api.Controllers
 
             if (!result.IsSuccess)
             {
-                return Problem(detail: result.Error, statusCode: StatusCodes.Status400BadRequest);
+                return Problem(detail: result.Error, statusCode: result.GetStatusCode());
             }
 
             return Accepted(result.Value);
@@ -73,10 +76,7 @@ namespace Bucket.Api.Controllers
 
             if (!result.IsSuccess)
             {
-                var status = result.Error == "Person not found."
-                    ? StatusCodes.Status404NotFound
-                    : StatusCodes.Status400BadRequest;
-                return Problem(detail: result.Error, statusCode: status);
+                return Problem(detail: result.Error, statusCode: result.GetStatusCode());
             }
 
             return Ok(result.Value);
@@ -89,10 +89,7 @@ namespace Bucket.Api.Controllers
 
             if (!result.IsSuccess)
             {
-                var status = result.Error == "Person not found."
-                    ? StatusCodes.Status404NotFound
-                    : StatusCodes.Status400BadRequest;
-                return Problem(detail: result.Error, statusCode: status);
+                return Problem(detail: result.Error, statusCode: result.GetStatusCode());
             }
 
             return Accepted();

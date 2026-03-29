@@ -20,7 +20,7 @@ public class DeleteProductCommandHandler : IRequestHandler<DeleteProductCommand,
         var product = await _productRepository.GetByIdAsync(command.Id, cancellationToken);
         if (product is null)
         {
-            return Result<long>.Failure("Product not found.");
+            return Result<long>.NotFound("Product not found.");
         }
 
         var deleteResult = product.Delete();
