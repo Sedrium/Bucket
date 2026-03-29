@@ -9,5 +9,5 @@ public interface IProductRepository
 
     Task<Result<long>> AddProductAsync(Product product, CancellationToken cancellationToken);
 
-    Task<Result<long>> UpdateProductAsync(Product product, CancellationToken cancellationToken);
+    Task<Result> UpdateProductAsync(Product product, CancellationToken cancellationToken);
 }

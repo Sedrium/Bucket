@@ -31,13 +31,17 @@ public class PersonRepository : IPersonRepository
         return Task.FromResult(Result<long>.Success(id));
     }
 
-    public Task<Result<long>> UpdatePersonAsync(Person person, CancellationToken cancellationToken)
+    public Task<Result> UpdatePersonAsync(Person person, CancellationToken cancellationToken)
     {
         var index = _data.Persons.FindIndex(p => p.Id == person.Id);
+        if (index < 0)
+        {
+            return Task.FromResult(Result.NotFound("Person not found."));
+        }
 
         _data.Persons[index] = person;
 
-        return Task.FromResult(Result<long>.Success(person.Id.Value));
+        return Task.FromResult(Result.Ok());
     }
 
     private long GetNextId()

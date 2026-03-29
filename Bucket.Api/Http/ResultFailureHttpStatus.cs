@@ -1,11 +1,14 @@
 using Bucket.Common;
-using Microsoft.AspNetCore.Http;
 
 namespace Bucket.Api.Http;
 
 public static class ResultFailureHttpStatus
 {
-    public static int GetStatusCode<T>(this Result<T> result) => result.FailureKind switch
+    public static int GetStatusCode(this Result result) => FromFailureKind(result.FailureKind);
+
+    public static int GetStatusCode<T>(this Result<T> result) => FromFailureKind(result.FailureKind);
+
+    private static int FromFailureKind(ResultFailureKind kind) => kind switch
     {
         ResultFailureKind.NotFound => StatusCodes.Status404NotFound,
         ResultFailureKind.BadRequest => StatusCodes.Status400BadRequest,

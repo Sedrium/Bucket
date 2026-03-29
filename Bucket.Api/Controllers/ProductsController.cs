@@ -66,11 +66,11 @@ public class ProductsController : ControllerBase
             return Problem(detail: result.Error, statusCode: result.GetStatusCode());
         }
 
-        return Accepted(result.Value);
+        return Accepted(result.Value!.Value);
     }
 
     [HttpPut("{id:long}")]
-    public async Task<ActionResult<long>> UpdateProduct([FromRoute] ProductIdRouteRequest route, [FromBody] UpdateProductRequest request)
+    public async Task<IActionResult> UpdateProduct([FromRoute] ProductIdRouteRequest route, [FromBody] UpdateProductRequest request)
     {
         var result = await _sender.Send(new UpdateProductCommand(route.Id, request.Name, request.Type, request.Price));
 
@@ -79,7 +79,7 @@ public class ProductsController : ControllerBase
             return Problem(detail: result.Error, statusCode: result.GetStatusCode());
         }
 
-        return Ok(result.Value);
+        return Accepted();
     }
 
     [HttpDelete("{id:long}")]

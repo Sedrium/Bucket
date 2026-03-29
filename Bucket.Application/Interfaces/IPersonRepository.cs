@@ -9,5 +9,5 @@ public interface IPersonRepository
 
     Task<Result<long>> AddPersonAsync(Person person, CancellationToken cancellationToken);
 
-    Task<Result<long>> UpdatePersonAsync(Person person, CancellationToken cancellationToken);
+    Task<Result> UpdatePersonAsync(Person person, CancellationToken cancellationToken);
 }

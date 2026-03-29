@@ -11,16 +11,20 @@ public readonly struct Result
 {
     public bool IsSuccess { get; }
     public string? Error { get; }
+    public ResultFailureKind FailureKind { get; }
 
-    private Result(bool isSuccess, string? error)
+    private Result(bool isSuccess, string? error, ResultFailureKind failureKind)
     {
         IsSuccess = isSuccess;
         Error = error;
+        FailureKind = failureKind;
     }
 
-    public static Result Ok() => new(true, null);
+    public static Result Ok() => new(true, null, ResultFailureKind.None);
 
-    public static Result Fail(string error) => new(false, error);
+    public static Result Fail(string error) => new(false, error, ResultFailureKind.BadRequest);
+
+    public static Result NotFound(string error) => new(false, error, ResultFailureKind.NotFound);
 }
 
 public record Result<T>(bool IsSuccess, T? Value, string? Error, ResultFailureKind FailureKind = ResultFailureKind.None)

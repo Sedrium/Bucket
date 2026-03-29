@@ -66,11 +66,11 @@ namespace Bucket.Api.Controllers
                 return Problem(detail: result.Error, statusCode: result.GetStatusCode());
             }
 
-            return Accepted(result.Value);
+            return Accepted(result.Value!.Value);
         }
 
         [HttpPut("{id:long}")]
-        public async Task<ActionResult<long>> UpdatePerson([FromRoute] PersonIdRouteRequest route, [FromBody] UpdatePersonRequest request)
+        public async Task<IActionResult> UpdatePerson([FromRoute] PersonIdRouteRequest route, [FromBody] UpdatePersonRequest request)
         {
             var result = await _sender.Send(new UpdatePersonCommand(route.Id, request.Firstname, request.Lastname, request.DateOfBirth));
 
@@ -79,7 +79,7 @@ namespace Bucket.Api.Controllers
                 return Problem(detail: result.Error, statusCode: result.GetStatusCode());
             }
 
-            return Ok(result.Value);
+            return Accepted();
         }
 
         [HttpDelete("{id:long}")]

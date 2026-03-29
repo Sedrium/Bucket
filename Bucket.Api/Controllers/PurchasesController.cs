@@ -66,11 +66,11 @@ public class PurchasesController : ControllerBase
             return Problem(detail: result.Error, statusCode: result.GetStatusCode());
         }
 
-        return Accepted(result.Value);
+        return Accepted(result.Value!.Value);
     }
 
     [HttpDelete("by-customer/{customerId:long}")]
-    public async Task<ActionResult<int>> DeletePurchasesByCustomer([FromRoute] CustomerIdRouteRequest route)
+    public async Task<IActionResult> DeletePurchasesByCustomer([FromRoute] CustomerIdRouteRequest route)
     {
         var result = await _sender.Send(new DeletePurchasesByCustomerCommand(route.CustomerId));
 
@@ -79,7 +79,7 @@ public class PurchasesController : ControllerBase
             return Problem(detail: result.Error, statusCode: result.GetStatusCode());
         }
 
-        return Accepted(result.Value);
+        return Accepted();
     }
 
     [HttpDelete("{id:long}")]

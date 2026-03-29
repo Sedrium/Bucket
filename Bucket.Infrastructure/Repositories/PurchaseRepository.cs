@@ -38,22 +38,22 @@ public class PurchaseRepository : IPurchaseRepository
         return Task.FromResult(Result<long>.Success(id));
     }
 
-    public Task<Result<long>> UpdatePurchaseAsync(Purchase purchase, CancellationToken cancellationToken)
+    public Task<Result> UpdatePurchaseAsync(Purchase purchase, CancellationToken cancellationToken)
     {
         if (!purchase.Id.HasValue)
         {
-            return Task.FromResult(Result<long>.Failure("Purchase id is required."));
+            return Task.FromResult(Result.Fail("Purchase id is required."));
         }
 
         var index = _data.Purchases.FindIndex(p => p.Id == purchase.Id);
         if (index < 0)
         {
-            return Task.FromResult(Result<long>.Failure("Purchase not found."));
+            return Task.FromResult(Result.NotFound("Purchase not found."));
         }
 
         _data.Purchases[index] = purchase;
 
-        return Task.FromResult(Result<long>.Success(purchase.Id.Value));
+        return Task.FromResult(Result.Ok());
     }
 
     private long GetNextId()

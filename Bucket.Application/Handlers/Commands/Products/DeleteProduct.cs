@@ -4,9 +4,9 @@ using MediatR;
 
 namespace Bucket.Application.Handlers.Commands.Products;
 
-public record DeleteProductCommand(long Id) : IRequest<Result<long>>;
+public record DeleteProductCommand(long Id) : IRequest<Result>;
 
-public class DeleteProductCommandHandler : IRequestHandler<DeleteProductCommand, Result<long>>
+public class DeleteProductCommandHandler : IRequestHandler<DeleteProductCommand, Result>
 {
     private readonly IProductRepository _productRepository;
 
@@ -15,26 +15,26 @@ public class DeleteProductCommandHandler : IRequestHandler<DeleteProductCommand,
         _productRepository = productRepository;
     }
 
-    public async Task<Result<long>> Handle(DeleteProductCommand command, CancellationToken cancellationToken)
+    public async Task<Result> Handle(DeleteProductCommand command, CancellationToken cancellationToken)
     {
         var product = await _productRepository.GetByIdAsync(command.Id, cancellationToken);
         if (product is null)
         {
-            return Result<long>.NotFound("Product not found.");
+            return Result.NotFound("Product not found.");
         }
 
         var deleteResult = product.Delete();
         if (!deleteResult.IsSuccess)
         {
-            return Result<long>.Failure(deleteResult.Error!);
+            return deleteResult;
         }
 
         var saved = await _productRepository.UpdateProductAsync(product, cancellationToken);
         if (!saved.IsSuccess)
         {
-            return Result<long>.Failure(saved.Error!);
+            return saved;
         }
 
-        return Result<long>.Success(saved.Value);
+        return Result.Ok();
     }
 }

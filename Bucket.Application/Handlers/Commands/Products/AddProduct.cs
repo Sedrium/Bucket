@@ -5,9 +5,9 @@ using MediatR;
 
 namespace Bucket.Application.Handlers.Commands.Products;
 
-public record AddProductCommand(string Name, string Type, double Price) : IRequest<Result<long>>;
+public record AddProductCommand(string Name, string Type, double Price) : IRequest<Result<EntityId>>;
 
-public class AddProductCommandHandler : IRequestHandler<AddProductCommand, Result<long>>
+public class AddProductCommandHandler : IRequestHandler<AddProductCommand, Result<EntityId>>
 {
     private readonly IProductRepository _productRepository;
 
@@ -16,20 +16,22 @@ public class AddProductCommandHandler : IRequestHandler<AddProductCommand, Resul
         _productRepository = productRepository;
     }
 
-    public async Task<Result<long>> Handle(AddProductCommand command, CancellationToken cancellationToken)
+    public async Task<Result<EntityId>> Handle(AddProductCommand command, CancellationToken cancellationToken)
     {
         var productResult = Product.Create(command.Name, command.Type, command.Price);
         if (!productResult.IsSuccess)
         {
-            return Result<long>.Failure(productResult.Error!);
+            return Result<EntityId>.Failure(productResult.Error!);
         }
 
         var added = await _productRepository.AddProductAsync(productResult.Value!, cancellationToken);
         if (!added.IsSuccess)
         {
-            return Result<long>.Failure(added.Error!);
+            return added.FailureKind == ResultFailureKind.NotFound
+                ? Result<EntityId>.NotFound(added.Error!)
+                : Result<EntityId>.Failure(added.Error!);
         }
 
-        return Result<long>.Success(added.Value);
+        return Result<EntityId>.Success(new EntityId(added.Value));
     }
 }

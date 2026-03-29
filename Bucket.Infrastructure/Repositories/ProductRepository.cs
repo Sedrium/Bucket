@@ -31,22 +31,22 @@ public class ProductRepository : IProductRepository
         return Task.FromResult(Result<long>.Success(id));
     }
 
-    public Task<Result<long>> UpdateProductAsync(Product product, CancellationToken cancellationToken)
+    public Task<Result> UpdateProductAsync(Product product, CancellationToken cancellationToken)
     {
         if (!product.Id.HasValue)
         {
-            return Task.FromResult(Result<long>.Failure("Product id is required."));
+            return Task.FromResult(Result.Fail("Product id is required."));
         }
 
         var index = _data.Products.FindIndex(p => p.Id == product.Id);
         if (index < 0)
         {
-            return Task.FromResult(Result<long>.Failure("Product not found."));
+            return Task.FromResult(Result.NotFound("Product not found."));
         }
 
         _data.Products[index] = product;
 
-        return Task.FromResult(Result<long>.Success(product.Id.Value));
+        return Task.FromResult(Result.Ok());
     }
 
     private long GetNextId()

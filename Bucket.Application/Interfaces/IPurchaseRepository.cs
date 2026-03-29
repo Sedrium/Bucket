@@ -11,5 +11,5 @@ public interface IPurchaseRepository
 
     Task<Result<long>> AddPurchaseAsync(Purchase purchase, CancellationToken cancellationToken);
 
-    Task<Result<long>> UpdatePurchaseAsync(Purchase purchase, CancellationToken cancellationToken);
+    Task<Result> UpdatePurchaseAsync(Purchase purchase, CancellationToken cancellationToken);
 }

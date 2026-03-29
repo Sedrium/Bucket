@@ -6,9 +6,9 @@ using MediatR;
 namespace Bucket.Application.Handlers.Commands.Persons;
 
 public record AddPersonCommand(string Firstname, string Lastname, int YearOfBirth)
-    : IRequest<Result<long>>;
+    : IRequest<Result<EntityId>>;
 
-public class AddPersonCommandHandler : IRequestHandler<AddPersonCommand, Result<long>>
+public class AddPersonCommandHandler : IRequestHandler<AddPersonCommand, Result<EntityId>>
 {
     private readonly IPersonRepository _personRepository;
 
@@ -17,13 +17,13 @@ public class AddPersonCommandHandler : IRequestHandler<AddPersonCommand, Result<
         _personRepository = personRepository;
     }
 
-    public async Task<Result<long>> Handle(AddPersonCommand command, CancellationToken cancellationToken)
+    public async Task<Result<EntityId>> Handle(AddPersonCommand command, CancellationToken cancellationToken)
     {
         var yearOfBirth = YearOfBirth.Create(command.YearOfBirth);
 
         if (!yearOfBirth.IsSuccess)
         {
-            return Result<long>.Failure(yearOfBirth.Error!);
+            return Result<EntityId>.Failure(yearOfBirth.Error!);
         }
 
         var personResult = Person.Create(
@@ -33,18 +33,18 @@ public class AddPersonCommandHandler : IRequestHandler<AddPersonCommand, Result<
 
         if (!personResult.IsSuccess)
         {
-            return Result<long>.Failure(personResult.Error!);
+            return Result<EntityId>.Failure(personResult.Error!);
         }
 
         var added = await _personRepository.AddPersonAsync(personResult.Value!, cancellationToken);
-        
+
         if (!added.IsSuccess)
         {
-            return Result<long>.Failure(added.Error!);
+            return added.FailureKind == ResultFailureKind.NotFound
+                ? Result<EntityId>.NotFound(added.Error!)
+                : Result<EntityId>.Failure(added.Error!);
         }
 
-        var personId = added.Value;
-
-        return Result<long>.Success(personId);
+        return Result<EntityId>.Success(new EntityId(added.Value));
     }
 }
