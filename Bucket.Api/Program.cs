@@ -1,3 +1,4 @@
+using Bucket.Api.Configuration;
 using Bucket.Application.Handlers.Queries.Persons;
 using Bucket.Application.Queries;
 using Bucket.Application.Repositories;
@@ -12,6 +13,7 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 
 builder.Services.AddControllers();
+builder.Services.Configure<FrontendOptions>(builder.Configuration.GetSection(FrontendOptions.SectionName));
 builder.Services.AddProblemDetails();
 builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblyContaining<GetPersonsQuery>());
 builder.Services.AddSingleton(_ => DataModel.Instance);
