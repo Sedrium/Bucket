@@ -1,4 +1,5 @@
 using Bucket.Domain.Persons;
+using Bucket.Domain.Products;
 
 namespace Bucket.Infrastructure.Data;
 
@@ -8,6 +9,23 @@ public sealed class Data
 
     private Data()
     {
+    }
+
+    public List<Product> Products { get; } =
+    [
+        CreateProduct(1, "Basic license", "Software", 99.99),
+        CreateProduct(2, "Pro license", "Software", 299.99),
+        CreateProduct(3, "Support pack", "Service", 49.50),
+        CreateProduct(4, "USB sensor", "Hardware", 24.00),
+        CreateProduct(5, "API bundle", "Software", 199.00),
+        CreateProduct(6, "Training day", "Service", 800.00)
+    ];
+
+    private static Product CreateProduct(long id, string name, string type, double price)
+    {
+        var product = new Product(name, type, price);
+        product.SetId(id);
+        return product;
     }
 
     public List<Person> Persons { get; } =

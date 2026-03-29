@@ -3,7 +3,7 @@ using Bucket.Common;
 using Bucket.Contract.Dtos.Persons;
 using MediatR;
 
-namespace Bucket.Application.Handlers.Queries;
+namespace Bucket.Application.Handlers.Queries.Persons;
 
 public record GetPersonQuery(int Id) : IRequest<Result<PersonDTO>>;
 

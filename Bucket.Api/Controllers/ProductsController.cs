@@ -1,0 +1,41 @@
+using Bucket.Application.Handlers.Queries.Products;
+using Bucket.Contract;
+using Bucket.Contract.Dtos.Products;
+using Bucket.Contract.Products;
+using MediatR;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+
+namespace Bucket.Api.Controllers;
+
+[ApiController]
+[Route("[controller]")]
+public class ProductsController : ControllerBase
+{
+    private readonly ISender _sender;
+
+    public ProductsController(ISender sender)
+    {
+        _sender = sender;
+    }
+
+    [HttpGet]
+    public async Task<ActionResult<PagedResponse<ProductDTO>>> GetProducts([FromQuery] GetProductsRequest request)
+    {
+        var paginationResult = Pagination.Create(request.Page, request.PageSize);
+
+        if (!paginationResult.IsSuccess)
+        {
+            return Problem(detail: paginationResult.Error, statusCode: StatusCodes.Status400BadRequest);
+        }
+
+        var result = await _sender.Send(new GetProductsQuery(paginationResult.Value!));
+
+        if (!result.IsSuccess)
+        {
+            return Problem(detail: result.Error, statusCode: StatusCodes.Status400BadRequest);
+        }
+
+        return Ok(result.Value);
+    }
+}

@@ -3,7 +3,7 @@ using Bucket.Common;
 using Bucket.Domain.Persons;
 using MediatR;
 
-namespace Bucket.Application.Handlers.Commands;
+namespace Bucket.Application.Handlers.Commands.Persons;
 
 public record AddPersonCommand(string Firstname, string Lastname, int YearOfBirth)
     : IRequest<Result<long>>;

@@ -2,7 +2,7 @@ using Bucket.Application.Interfaces;
 using Bucket.Common;
 using MediatR;
 
-namespace Bucket.Application.Handlers.Commands;
+namespace Bucket.Application.Handlers.Commands.Persons;
 
 public record DeletePersonCommand(long Id) : IRequest<Result<long>>;
 

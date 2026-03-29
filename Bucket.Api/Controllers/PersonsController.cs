@@ -1,5 +1,5 @@
-using Bucket.Application.Handlers.Commands;
-using Bucket.Application.Handlers.Queries;
+using Bucket.Application.Handlers.Commands.Persons;
+using Bucket.Application.Handlers.Queries.Persons;
 using Bucket.Contract;
 using Bucket.Contract.Dtos.Persons;
 using Bucket.Contract.Persons.Persons;

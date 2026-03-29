@@ -4,7 +4,7 @@ using Bucket.Contract;
 using Bucket.Contract.Dtos.Persons;
 using MediatR;
 
-namespace Bucket.Application.Handlers.Queries;
+namespace Bucket.Application.Handlers.Queries.Persons;
 
 public record GetPersonsQuery(Pagination Pagination) : IRequest<Result<PagedResponse<PersonDTO>>>;
 
