@@ -3,7 +3,7 @@ using Bucket.Application.Handlers.Commands.Products;
 using Bucket.Application.Handlers.Queries.Products;
 using Bucket.Contract;
 using Bucket.Contract.Dtos.Products;
-using Bucket.Contract.Products;
+using Bucket.Contract.Requests.Products;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;

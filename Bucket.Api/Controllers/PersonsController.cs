@@ -3,7 +3,7 @@ using Bucket.Application.Handlers.Commands.Persons;
 using Bucket.Application.Handlers.Queries.Persons;
 using Bucket.Contract;
 using Bucket.Contract.Dtos.Persons;
-using Bucket.Contract.Persons.Persons;
+using Bucket.Contract.Requests.Persons;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;

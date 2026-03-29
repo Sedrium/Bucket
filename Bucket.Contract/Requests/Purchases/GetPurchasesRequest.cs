@@ -1,3 +1,3 @@
-namespace Bucket.Contract.Purchases;
+namespace Bucket.Contract.Requests.Purchases;
 
 public record GetPurchasesRequest : PageRequest;

@@ -1,4 +1,4 @@
-namespace Bucket.Contract.Products;
+namespace Bucket.Contract.Requests.Products;
 
 public record GetProductRequest
 {

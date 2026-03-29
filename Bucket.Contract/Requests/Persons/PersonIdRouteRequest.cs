@@ -1,4 +1,4 @@
-namespace Bucket.Contract.Persons.Persons;
+namespace Bucket.Contract.Requests.Persons;
 
 public record PersonIdRouteRequest
 {

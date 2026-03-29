@@ -3,7 +3,7 @@ using Bucket.Application.Handlers.Queries.Purchases;
 using Bucket.Api.Http;
 using Bucket.Contract;
 using Bucket.Contract.Dtos.Purchases;
-using Bucket.Contract.Purchases;
+using Bucket.Contract.Requests.Purchases;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
