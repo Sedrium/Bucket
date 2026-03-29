@@ -33,28 +33,18 @@ public class AddPurchaseCommandHandler : IRequestHandler<AddPurchaseCommand, Res
 
         var distinctProductIds = command.ProductIds.Distinct().ToList();
         var products = await _productRepository.GetByIdsAsync(distinctProductIds, cancellationToken);
-
-        var purchaseResult = PurchaseComposition.TryCreate(
-            customer,
-            command.ProductIds,
-            products);
-
-        if (!purchaseResult.IsSuccess)
+        if (products.Count != distinctProductIds.Count)
         {
-            return purchaseResult.FailureKind switch
-            {
-                ResultFailureKind.NotFound => Result<EntityId>.NotFound(purchaseResult.Error!),
-                _ => Result<EntityId>.Failure(purchaseResult.Error!),
-            };
+            return Result<EntityId>.NotFound("One or more products not found.");
         }
 
-        var added = await _purchaseRepository.AddPurchaseAsync(purchaseResult.Value!, cancellationToken);
-        if (!added.IsSuccess)
+        var purchase = Purchase.Create(command.CustomerId, [.. products.Select(p => p.Id!.Value)]);
+        if (!purchase.IsSuccess)
         {
-            return added.FailureKind == ResultFailureKind.NotFound
-                ? Result<EntityId>.NotFound(added.Error!)
-                : Result<EntityId>.Failure(added.Error!);
+            return Result<EntityId>.Failure(purchase.Error!);
         }
+
+        var added = await _purchaseRepository.AddPurchaseAsync(purchase.Value!, cancellationToken);
 
         return Result<EntityId>.Success(new EntityId(added.Value));
     }
