@@ -31,13 +31,13 @@ public class UpdatePersonCommandHandler : IRequestHandler<UpdatePersonCommand, R
             return Result<long>.Failure(yearOfBirth.Error!);
         }
 
-        var changed = existing.Update(command.Firstname, command.Lastname, yearOfBirth.Value!);
-        if (!changed.IsSuccess)
+        var updateResult = existing.Update(command.Firstname, command.Lastname, yearOfBirth.Value!);
+        if (!updateResult.IsSuccess)
         {
-            return Result<long>.Failure(changed.Error!);
+            return Result<long>.Failure(updateResult.Error!);
         }
 
-        var saved = await _personRepository.UpdatePersonAsync(changed.Value!, cancellationToken);
+        var saved = await _personRepository.UpdatePersonAsync(existing, cancellationToken);
         if (!saved.IsSuccess)
         {
             return Result<long>.Failure(saved.Error!);

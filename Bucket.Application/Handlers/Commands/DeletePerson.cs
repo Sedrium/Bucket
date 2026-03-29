@@ -23,13 +23,13 @@ public class DeletePersonCommandHandler : IRequestHandler<DeletePersonCommand, R
             return Result<long>.Failure("Person not found.");
         }
 
-        var deleted = person.Delete();
-        if (!deleted.IsSuccess)
+        var deleteResult = person.Delete();
+        if (!deleteResult.IsSuccess)
         {
-            return Result<long>.Failure(deleted.Error!);
+            return Result<long>.Failure(deleteResult.Error!);
         }
 
-        var saved = await _personRepository.UpdatePersonAsync(deleted.Value!, cancellationToken);
+        var saved = await _personRepository.UpdatePersonAsync(person, cancellationToken);
         if (!saved.IsSuccess)
         {
             return Result<long>.Failure(saved.Error!);

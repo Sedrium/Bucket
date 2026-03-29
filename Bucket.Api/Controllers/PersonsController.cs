@@ -67,9 +67,9 @@ namespace Bucket.Api.Controllers
         }
 
         [HttpPut("{id:long}")]
-        public async Task<ActionResult<long>> UpdatePerson(long id, [FromBody] UpdatePersonRequest request)
+        public async Task<ActionResult<long>> UpdatePerson([FromRoute] PersonIdRouteRequest route, [FromBody] UpdatePersonRequest request)
         {
-            var result = await _sender.Send(new UpdatePersonCommand(id, request.Firstname, request.Lastname, request.DateOfBirth));
+            var result = await _sender.Send(new UpdatePersonCommand(route.Id, request.Firstname, request.Lastname, request.DateOfBirth));
 
             if (!result.IsSuccess)
             {
@@ -83,9 +83,9 @@ namespace Bucket.Api.Controllers
         }
 
         [HttpDelete("{id:long}")]
-        public async Task<IActionResult> DeletePerson(long id)
+        public async Task<IActionResult> DeletePerson([FromRoute] PersonIdRouteRequest route)
         {
-            var result = await _sender.Send(new DeletePersonCommand(id));
+            var result = await _sender.Send(new DeletePersonCommand(route.Id));
 
             if (!result.IsSuccess)
             {
