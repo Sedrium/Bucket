@@ -1,4 +1,4 @@
-using Bucket.Application.Interfaces;
+using Bucket.Application.Queries;
 using Bucket.Common;
 using Bucket.Contract;
 using Bucket.Contract.Dtos.Products;
@@ -34,6 +34,26 @@ public class ProductQuery : IProductQuery
     {
         var product = _data.Products.FirstOrDefault(p => p.Id == id && !p.IsDeleted);
         return Task.FromResult(product is null ? null : MapToDto(product));
+    }
+
+    public Task<IReadOnlyList<ProductDTO>> GetProductsByIdsAsync(
+        IReadOnlyCollection<long> productIds,
+        CancellationToken cancellationToken)
+    {
+        if (productIds.Count == 0)
+        {
+            return Task.FromResult<IReadOnlyList<ProductDTO>>(Array.Empty<ProductDTO>());
+        }
+
+        var idSet = new HashSet<long>(productIds);
+
+        var list = _data.Products
+            .Where(p => !p.IsDeleted && p.Id.HasValue && idSet.Contains(p.Id.Value))
+            .OrderBy(p => p.Id)
+            .Select(MapToDto)
+            .ToList();
+
+        return Task.FromResult<IReadOnlyList<ProductDTO>>(list);
     }
 
     private static ProductDTO MapToDto(Product product)

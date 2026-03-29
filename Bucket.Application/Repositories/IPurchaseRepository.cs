@@ -1,7 +1,7 @@
 using Bucket.Common;
 using Bucket.Domain.Purchases;
 
-namespace Bucket.Application.Interfaces;
+namespace Bucket.Application.Repositories;
 
 public interface IPurchaseRepository
 {

@@ -1,4 +1,4 @@
-using Bucket.Application.Interfaces;
+using Bucket.Application.Queries;
 using Bucket.Common;
 using Bucket.Contract;
 using Bucket.Contract.Dtos.Persons;
@@ -30,7 +30,7 @@ public class PersonQuery : IPersonQuery
         return Task.FromResult(Result<PagedResponse<PersonDTO>>.Success(new PagedResponse<PersonDTO>(items, totalCount)));
     }
 
-    public Task<PersonDTO?> GetPersonByIdAsync(int id, CancellationToken cancellationToken)
+    public Task<PersonDTO?> GetPersonByIdAsync(long id, CancellationToken cancellationToken)
     {
         var person = _data.Persons.FirstOrDefault(p => p.Id == id && !p.IsDeleted);
         return Task.FromResult(person is null ? null : MapToDto(person));

@@ -43,7 +43,7 @@ namespace Bucket.Api.Controllers
             return Ok(result.Value);
         }
 
-        [HttpGet("{id:int}")]
+        [HttpGet("{id:long}")]
         public async Task<ActionResult<PersonDTO>> GetPerson([FromRoute] GetPersonRequest request)
         {
             var result = await _sender.Send(new GetPersonQuery(request.Id));

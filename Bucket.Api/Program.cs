@@ -1,6 +1,9 @@
 using Bucket.Application.Handlers.Queries.Persons;
-using Bucket.Application.Interfaces;
+using Bucket.Application.Queries;
+using Bucket.Application.Repositories;
+using Bucket.Application.Services;
 using Bucket.Infrastructure.Queries;
+using Bucket.Infrastructure.Reports;
 using Bucket.Infrastructure.Repositories;
 using DataModel = Bucket.Infrastructure.Data.Data;
 
@@ -18,6 +21,7 @@ builder.Services.AddScoped<IPersonRepository, PersonRepository>();
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
 builder.Services.AddScoped<IPurchaseQuery, PurchaseQuery>();
 builder.Services.AddScoped<IPurchaseRepository, PurchaseRepository>();
+builder.Services.AddScoped<IRaportGenerator, RaportGenerator>();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
 

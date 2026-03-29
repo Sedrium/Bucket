@@ -1,11 +1,11 @@
-using Bucket.Application.Interfaces;
+using Bucket.Application.Queries;
 using Bucket.Common;
 using Bucket.Contract.Dtos.Persons;
 using MediatR;
 
 namespace Bucket.Application.Handlers.Queries.Persons;
 
-public record GetPersonQuery(int Id) : IRequest<Result<PersonDTO>>;
+public record GetPersonQuery(long Id) : IRequest<Result<PersonDTO>>;
 
 public class GetPersonQueryHandler : IRequestHandler<GetPersonQuery, Result<PersonDTO>>
 {

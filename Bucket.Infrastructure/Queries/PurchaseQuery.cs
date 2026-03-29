@@ -1,4 +1,4 @@
-using Bucket.Application.Interfaces;
+using Bucket.Application.Queries;
 using Bucket.Common;
 using Bucket.Contract;
 using Bucket.Contract.Dtos.Purchases;

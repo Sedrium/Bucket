@@ -1,7 +1,7 @@
 using Bucket.Common;
 using Bucket.Domain.Persons;
 
-namespace Bucket.Application.Interfaces;
+namespace Bucket.Application.Repositories;
 
 public interface IPersonRepository
 {

@@ -1,4 +1,4 @@
-using Bucket.Application.Interfaces;
+using Bucket.Application.Repositories;
 using Bucket.Common;
 using Bucket.Domain.Persons;
 using DataModel = Bucket.Infrastructure.Data.Data;

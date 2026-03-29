@@ -2,7 +2,7 @@ using Bucket.Common;
 using Bucket.Contract;
 using Bucket.Contract.Dtos.Purchases;
 
-namespace Bucket.Application.Interfaces;
+namespace Bucket.Application.Queries;
 
 public interface IPurchaseQuery
 {
