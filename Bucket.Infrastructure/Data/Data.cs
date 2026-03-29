@@ -1,5 +1,6 @@
 using Bucket.Domain.Persons;
 using Bucket.Domain.Products;
+using Bucket.Domain.Purchases;
 
 namespace Bucket.Infrastructure.Data;
 
@@ -64,6 +65,25 @@ public sealed class Data
 
         result.Value!.SetId(id);
 
+        return result.Value!;
+    }
+
+    public List<Purchase> Purchases { get; } =
+    [
+        CreatePurchase(1, 1, [1L, 2L]),
+        CreatePurchase(2, 2, [3L, 4L]),
+        CreatePurchase(3, 1, [5L])
+    ];
+
+    private static Purchase CreatePurchase(long id, long customerId, long[] productIds)
+    {
+        var result = Purchase.Create(customerId, productIds);
+        if (!result.IsSuccess)
+        {
+            throw new InvalidOperationException($"Seed purchase invalid: {result.Error}");
+        }
+
+        result.Value!.SetId(id);
         return result.Value!;
     }
 }
