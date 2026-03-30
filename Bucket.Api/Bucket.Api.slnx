@@ -1,7 +1,10 @@
 <Solution>
+  <Project Path="../Bucket.Api.Tests/Bucket.Api.Tests.csproj" />
+  <Project Path="../Bucket.Application.Tests/Bucket.Application.Tests.csproj" />
   <Project Path="../Bucket.Application/Bucket.Application.csproj" />
   <Project Path="../Bucket.Common/Bucket.Common.csproj" Id="1ea3bc03-57f2-43dc-bca9-8cc8a260623a" />
   <Project Path="../Bucket.Contract/Bucket.Contract.csproj" />
+  <Project Path="../Bucket.Domain.Tests/Bucket.Domain.Tests.csproj" />
   <Project Path="../Bucket.Domain/Bucket.Domain.csproj" />
   <Project Path="../Bucket.Infrastructure/Bucket.Infrastructure.csproj" />
   <Project Path="Bucket.Api.csproj" />

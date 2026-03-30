@@ -7,19 +7,8 @@ public enum ResultFailureKind
     NotFound,
 }
 
-public readonly struct Result
+public record Result(bool IsSuccess, string? Error, ResultFailureKind FailureKind)
 {
-    public bool IsSuccess { get; }
-    public string? Error { get; }
-    public ResultFailureKind FailureKind { get; }
-
-    private Result(bool isSuccess, string? error, ResultFailureKind failureKind)
-    {
-        IsSuccess = isSuccess;
-        Error = error;
-        FailureKind = failureKind;
-    }
-
     public static Result Ok() => new(true, null, ResultFailureKind.None);
 
     public static Result Fail(string error) => new(false, error, ResultFailureKind.BadRequest);
